@@ -1,0 +1,21 @@
+<html>
+  <head>
+    <title><%= title %></title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.4/socket.io.js"></script>
+  </head>
+  <body onload="init();">
+    <div style="background-color: #e2e2e2;">
+      <input type="text" name="username" id="username"/> <input type="button" onclick="change_username();" value="Change Username"/>
+    </div>
+    <hr />
+    <div style="background-color: #fbf7f7; height: 100%;">
+
+    </div>
+    <br />
+    <div style="bottom: 0; width: 99%;">
+      <input style="display: inline-block; width: 98%;" type="text" name="message" id="message"/>
+      <input style="display: inline-block; position: absolute;" type="button" onclick="new_message();" value="Send"/>
+    </div>
+    <script src="chat.js"></script>
+  </body>
+</html>
