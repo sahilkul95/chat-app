@@ -1,23 +1,37 @@
-const express = require('express')
+const app = require("express")();
+const express = require("express");
+const http = require("http").Server(app);
+const port = process.env.PORT || 3000;
 
-const app = express()
+//app.get("/", function(req, res) {
+//    res.sendFile(__dirname + "/views/index.html");
+//});
 
-app.set('view engine', 'ejs')
-app.use(express.static('public'))
+app.use(express.static("public"));
 
-app.get('/', (req, res) => {
-  res.render('index', {title: "Simple chat app"})
-})
+http.listen(port, function() {
+    console.log("Listening on http://localhost:" + port);
+});
 
-server = app.listen(3000)
-console.log('Server is listening on http://localhost:3000')
 
-const io = require('socket.io')(server)
+
+
+const io = require('socket.io')(http)
 
 io.on('connection', (socket) => {
-  console.log('New user connected.')
-  socket.username = "Anonymous"
-  socket.on("change_username", (data) => {
-    socket.username = data.username
-  })
+   socket.on("user_join", function(data) {
+        this.username = data;
+        console.log("New user is connected with name: ", data);
+        socket.broadcast.emit("user_join", data);
+    });
+
+    socket.on("chat_message", function(data) {
+        data.username = this.username;
+        console.log(data.message);
+        socket.broadcast.emit("chat_message", data);
+    });
+
+    socket.on("disconnect", function(data) {
+        socket.broadcast.emit("user_leave", this.username);
+    });
 })
