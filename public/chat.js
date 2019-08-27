@@ -1,8 +1,18 @@
 const form = document.querySelector("form");
 const input = document.querySelector(".input");
 const messages = document.querySelector(".messages");
-const username = window.prompt("Please enter a username: ", "");
+let username;
 const socket = io();
+
+function validateName() {
+  username = prompt("Please enter a username: ", "");
+  if (!username) {
+    alert("Username is required to join the chat room!");
+    validateName();
+  }
+}
+
+validateName();
 
 form.addEventListener("submit", function(event) {
     event.preventDefault();
@@ -27,7 +37,7 @@ socket.on("user_leave", function(data) {
     addMessage(data + " has left the chat.");
 });
 
-addMessage("You have joined the chat as '" + username  + "'.");
+addMessage("You have joined the chat as '" + username  + "'!");
 socket.emit("user_join", username);
 
 
